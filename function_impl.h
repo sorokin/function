@@ -100,7 +100,15 @@ namespace function_impl
     {
         using storage = function_impl::storage<R, Args...>;
 
-        static type_descriptor<R, Args...> instance =
+        /*
+        constexpr здесь полезен как способ гарантировать, что у нас будет
+        делаться статическая инициализация, а не динамическая.
+
+        Стоит так же обратить внимание, что конверсия лямбд в указатель
+        на функцию constexpr лишь начиная с C++17. До C++17 пришлось бы
+        объявлять функции и брать их адреса.
+        */
+        static constexpr type_descriptor<R, Args...> instance =
         {
             /*copy =*/ [] (storage* dst, storage const*)
             {
@@ -135,7 +143,7 @@ namespace function_impl
         {
             using storage = storage<R, Args...>;
 
-            static type_descriptor<R, Args...> instance =
+            static constexpr type_descriptor<R, Args...> instance =
             {
                 /*copy =*/ [] (storage* dst, storage const* src)
                 {
@@ -186,7 +194,7 @@ namespace function_impl
         {
             using storage = storage<R, Args...>;
 
-            static type_descriptor<R, Args...> instance =
+            static constexpr type_descriptor<R, Args...> instance =
             {
                 /*copy =*/ [] (storage* dst, storage const* src)
                 {
